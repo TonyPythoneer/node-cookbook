@@ -1,5 +1,7 @@
 # Nodejs
 node_modules/
+*.log
 
 # ts
 dist/
+typings/

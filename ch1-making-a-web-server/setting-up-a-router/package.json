@@ -6,7 +6,7 @@
   "scripts": {
     "install": "typings install",
     "watch": "tsc -w",
-    "start": "node index.js"
+    "start": "node dist/app.js"
   },
   "repository": {
     "type": "git",
