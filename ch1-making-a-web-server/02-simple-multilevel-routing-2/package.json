@@ -1,0 +1,21 @@
+{
+  "name": "simple-multilevel-routing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "typings install",
+    "watch": "tsc -w",
+    "start": "node dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyPythoneer/node-cookbook.git"
+  },
+  "author": "TonyPythoneer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
+  },
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme"
+}
