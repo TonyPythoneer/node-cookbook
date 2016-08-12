@@ -1,12 +1,14 @@
 {
   "name": "setting-up-a-router",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "Page 8 - Setting up a router",
+  "main": "dist/index.js",
   "scripts": {
-    "install": "typings install",
+    "preinstall": "typings install",
+    "build": "tsc",
     "watch": "tsc -w",
-    "start": "node dist/app.js"
+    "dev": "npm run build && supervisor dist/app.js",
+    "start": "npm run build && node dist/app.js"
   },
   "repository": {
     "type": "git",
