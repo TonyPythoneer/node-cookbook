@@ -42,7 +42,7 @@ const mimeTypes: IMimeTypes = {
 interface IPromiseError extends NodeJS.ErrnoException {
     cause: NodeJS.ErrnoException,
 }
-const server = http.createServer((req: http.IncomingMessage,
+const serverWithPromise = http.createServer((req: http.IncomingMessage,
                                   res: http.ServerResponse) => {
     // Local variables
     let lookup = path.basename(decodeURI(req.url)) || 'index.html';
@@ -51,33 +51,39 @@ const server = http.createServer((req: http.IncomingMessage,
     // Wrap fs.access in Promise
     let access = Promise.promisify(fs.access)
     access(filePath).then(() => {
+        // -- SUCESSFUL --
         // the path is valid
-        console.log(`${filePath} doesn't exist`);
+        console.log(`Exist!`);
 
         // Wrap fs.readFile in Promise
         let readFile = Promise.promisify(fs.readFile);
         readFile(filePath).then((data: Buffer) => {
+            // -- SUCESSFUL --
             // Response with buffer
             let headers = { 'Content-type': mimeTypes[path.extname(lookup)] };
             res.writeHead(200, headers);
             res.end(data);
+        }).catch((err: IPromiseError) => {
+            // -- FAIL --
+            // Response with 500
+            res.writeHead(500);
+            res.end('ServerError!');
         });
     }).catch((err: IPromiseError) => {
+        // -- FAIL --
         // Log invalid path
         console.log(`${filePath} doesn't exist`);
 
-        // Response with ServerError
-        res.writeHead(500);
-        res.end('ServerError!');
-        return;
+        // Response with 404
+        res.writeHead(404);
+        res.end('Page not Found!');
     })
+}).listen(8081, () => {
+    console.log(`[INFO] Create http server with promise version: 127.0.0.1:8081 / localhost:8081`)
 });
 
 
-/**
- * No promise version
- */
-/*
+
 const server = http.createServer((req: http.IncomingMessage, res: http.ServerResponse) => {
     // Local variables
     let lookup = path.basename(decodeURI(req.url)) || 'index.html';
@@ -88,6 +94,13 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
 
         // Check file
         console.log(err ? `${filePath} doesn't exist` : `${filePath} is there`);
+
+        // Response with 404
+        if (Boolean(err)){
+            res.writeHead(404);
+            res.end('Page not Found!');
+            return;
+        }
 
         // Read file when existed
         fs.readFile(filePath, (err: NodeJS.ErrnoException, data: Buffer) => {
@@ -102,10 +115,6 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
             res.end(data);
         });
     });
-
-});
-*/
-
-server.listen(8080, () => {
+}).listen(8080, () => {
     console.log(`[INFO] Create http server: 127.0.0.1:8080 / localhost:8080`)
 });
