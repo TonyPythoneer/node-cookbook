@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
   },
-  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme"
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1"
+  }
 }
