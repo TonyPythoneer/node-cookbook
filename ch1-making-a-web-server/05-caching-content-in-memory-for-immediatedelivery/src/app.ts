@@ -59,21 +59,19 @@ function cacheAndDeliver(f: string,
     cb(null, cache[f].content);
 }
 function cacheAndDeliverWithPromise(f: string,
-    cb: (err: NodeJS.ErrnoException, data: Buffer) => void) {
+                                    cb: (err: NodeJS.ErrnoException, data: Buffer) => void) {
     if (!cache[f]) {
-        /*
-        fs.readFile(f, (err: NodeJS.ErrnoException, data: Buffer) => {
-            // Cache the data when it's not in cache
-            if (!err) cache[f] = { content: data };
-            cb(err, data);
-        });
-        */
         let readFile = Promise.promisify(fs.readFile);
         readFile(f).then((data: Buffer) => {
             // -- SUCESSFUL --
             cache[f] = { content: data };
+            cb(null, data);
+        }).catch((err) => {
+            // -- FAIL --
+            cb(err, null);
         });
     }
+    // return cache when existed
     console.log(`loading ${f} from cache`);
     cb(null, cache[f].content);
 }
@@ -132,20 +130,19 @@ const serverWithPromise = http.createServer((req: http.IncomingMessage,
         // the path is valid
         console.log(`Exist!`);
 
-        // Wrap fs.readFile in Promise
-        let readFile = Promise.promisify(fs.readFile);
-        readFile(filePath).then((data: Buffer) => {
+        // Wrap cacheAndDeliverWithPromise in Promise
+        let cacheFunc = Promise.promisify(cacheAndDeliverWithPromise);
+        cacheFunc(filePath).then((data: Buffer) => {
             // -- SUCESSFUL --
-            // Response with buffer
+            // Content can be found
             let headers = { 'Content-type': mimeTypes[path.extname(lookup)] };
             res.writeHead(200, headers);
             res.end(data);
-        }).catch((err: IPromiseError) => {
+        }).catch((err) => {
             // -- FAIL --
-            // Response with 500
-            res.writeHead(500);
-            res.end('ServerError!');
-        });
+            // Content not found
+            res.writeHead(500); res.end('ServerError!'); return;
+        })
     }).catch((err: IPromiseError) => {
         // -- FAIL --
         // Log invalid path
