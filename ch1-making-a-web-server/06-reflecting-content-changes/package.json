@@ -1,0 +1,26 @@
+{
+  "name": "reflecting-content-changes",
+  "version": "0.0.0",
+  "description": "Page 20 - Reflecting content changes",
+  "main": "dist/index.js",
+  "scripts": {
+    "preinstall": "typings install",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "dev": "npm run build && supervisor dist/app.js",
+    "start": "npm run build && node dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyPythoneer/node-cookbook.git"
+  },
+  "author": "TonyPythoneer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
+  },
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1"
+  }
+}
