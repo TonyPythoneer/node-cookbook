@@ -8,22 +8,6 @@ import * as Promise from 'bluebird';
 /**
  * const
  */
-interface IRoute {
-    id: string,
-    route: string,
-    output?: string | (() => string),
-}
-const routes: Array<IRoute> = [
-    { id: '1', route: '', output: 'Woohoo!' },
-    { id: '2', route: 'about', output: 'A simple routing with Nodeexample' },
-    {
-        id: '3', route: 'another page', output: function() {
-            return 'Here\'s ' + this.route;
-        }
-    },
-];
-
-
 interface IMimeTypes {
     ".js": string,
     ".html": string,
@@ -86,7 +70,7 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
         // Store the file buffer in cache
         fs.stat(filePath, (err, stats) => {
             let bufferOffset = 0;
-            cache[filePath] = { content: Buffer.alloc(stats.size, undefined, 'utf8') };  // Deprecated: new Buffer
+            cache[filePath] = { content: Buffer.alloc(stats.size) };  // Deprecated: new Buffer
 
             readStream.on('data', function(chunk: Buffer) {
                 chunk.copy(cache[filePath].content, bufferOffset);
