@@ -1,7 +1,7 @@
 {
-  "name": "optimizing-performance-with-streaming",
+  "name": "protecting-against-process-memory-overruns",
   "version": "0.0.0",
-  "description": "Page 22 - Optimizing performance with streaming",
+  "description": "Page 25 - Protecting against process memory overruns",
   "main": "dist/index.js",
   "scripts": {
     "preinstall": "typings install",

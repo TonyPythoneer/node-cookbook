@@ -102,7 +102,7 @@ const server = http.createServer((req: http.IncomingMessage, res: http.ServerRes
                 };
 
                 readStream.on('data', (chunk: Buffer) => {
-                    chunk.copy(cache[filePath].content, bufferOffset);
+                    chunk.copy(cache.store[filePath].content, bufferOffset);
                     bufferOffset += chunk.length;
                 });
             }
