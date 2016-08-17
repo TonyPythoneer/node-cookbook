@@ -1,0 +1,23 @@
+{
+  "name": "processing-post-data",
+  "version": "0.0.0",
+  "description": "Page 35 - Processing POST data",
+  "main": "dist/app.js",
+  "scripts": {
+    "preinstall": "typings install",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "dev": "npm run build && supervisor dist/app.js",
+    "start": "npm run build && node dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyPythoneer/node-cookbook.git"
+  },
+  "author": "TonyPythoneer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
+  },
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme"
+}
