@@ -30,7 +30,7 @@ const server = http.createServer((req, res) => {
             // event listener
             incoming.on('file', (field, file) => {
                 if (!file.size) { return; }
-                res.write(file.name + ' received\n');
+                res.write(`${file.name} received\n`);
             }).on('end', () => {
                 res.end('All files received');
             });
