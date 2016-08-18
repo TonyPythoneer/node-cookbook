@@ -1,0 +1,28 @@
+{
+  "name": "using-formidable-to-accept-all-post-data",
+  "version": "0.0.0",
+  "description": "Page 43 - Using formidable to accept all POST data",
+  "main": "dist/app.js",
+  "scripts": {
+    "pre-install": "typings install",
+    "dev": "concurrently \"npm run dev:watch\" \"npm run dev:start\"",
+    "dev:watch": "tsc -w",
+    "dev:start": "supervisor dist/app.js",
+    "start": "concurrently \"npm run prod:build\" \"npm run prod:start\"",
+    "prod:buid": "tsc",
+    "prod:start": "node dist/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyPythoneer/node-cookbook.git"
+  },
+  "author": "TonyPythoneer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
+  },
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme",
+  "dependencies": {
+    "formidable": "^1.0.17"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "setting-up-a-router",
+  "dependencies": {},
+  "globalDependencies": {
+    "formidable": "registry:dt/formidable#1.0.16+20160316155526",
+    "node": "registry:dt/node#6.0.0+20160801161248"
+  }
+}
