@@ -1,7 +1,7 @@
 {
-  "name": "using-formidable-to-accept-all-post-data",
+  "name": "uploading-files-via-put",
   "version": "0.0.0",
-  "description": "Page 43 - Using formidable to accept all POST data",
+  "description": "Page 44 - Uploading files via PUT",
   "main": "dist/app.js",
   "scripts": {
     "pre-install": "typings install",
