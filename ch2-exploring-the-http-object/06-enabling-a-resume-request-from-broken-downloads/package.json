@@ -1,0 +1,26 @@
+{
+  "name": "implementing-download-throttling",
+  "version": "0.0.0",
+  "description": "Page 57 - Enabling a resume request from broken downloads",
+  "main": "dist/app.js",
+  "scripts": {
+    "pre-install": "typings install",
+    "dev": "concurrently \"npm run dev:watch\" \"npm run dev:start\"",
+    "dev:watch": "tsc -w",
+    "dev:start": "supervisor dist/app.js",
+    "start": "concurrently \"npm run prod:build\" \"npm run prod:start\"",
+    "prod:buid": "tsc",
+    "prod:start": "node dist/app.js",
+    "50meg": "dd if=/dev/zero of=50meg count=50 bs=1048576"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyPythoneer/node-cookbook.git"
+  },
+  "author": "TonyPythoneer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
+  },
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme"
+}
