@@ -28,8 +28,21 @@ Not completed:
 
 # Requirement
 
+In order to fast install, I offer command is easy to copy and paste.
+
+For windows:
+
 ```sh
 npm install -g typescript
 npm install -g typings
 npm install -g supervisor
+npm install -g concurrently
+```
+
+For linux:
+```sh
+sudo npm install -g typescript
+sudo npm install -g typings
+sudo npm install -g supervisor
+sudo npm install -g concurrently
 ```
