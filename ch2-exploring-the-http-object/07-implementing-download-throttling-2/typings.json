@@ -1,0 +1,7 @@
+{
+  "name": "processing-post-data",
+  "dependencies": {},
+  "globalDependencies": {
+    "node": "registry:dt/node#6.0.0+20160801161248"
+  }
+}
