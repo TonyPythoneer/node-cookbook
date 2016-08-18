@@ -1,7 +1,11 @@
 ch2
 
+a = ''
+a.lower().replace(' ', '-')
+
 p39
 Accessing POST data with connect and body-parser
+# Deprecated: The module version is too old
 
 p40
 Handling file uploads
