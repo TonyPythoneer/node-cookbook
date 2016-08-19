@@ -14,7 +14,7 @@ const KILOBYTE = 1024;
 class Options{
     public file: string = FILE;
     public fileSize: number = fs.statSync(FILE).size;
-    public kbps: number = 1024 * 20 * KILOBYTE;
+    public kbps: number = 32 * KILOBYTE;  // test: 20 * 1024 * KILOBYTE
 }
 
 class DownloadOpts extends Options {
@@ -39,7 +39,7 @@ class DownloadOpts extends Options {
 /**
  * throttle
  */
-function throttle(opts: DownloadOpts, sendChunk: (chunk: Buffer) => void) {
+function throttle(opts: DownloadOpts, sendChunk: (chunk: Buffer, isLast: boolean) => void) {
     (function loopSendChunk(bytesSent: number, timer: number = 1000) {
         setTimeout(() => {
             // Record current sent bytes from now
@@ -47,14 +47,14 @@ function throttle(opts: DownloadOpts, sendChunk: (chunk: Buffer) => void) {
 
             // First send chunk and set timer
             if (opts.isReadyToSend(bytesOut)) {
-                sendChunk(opts.getFileSlice(bytesSent, bytesOut));
+                sendChunk(opts.getFileSlice(bytesSent, bytesOut), false);
                 loopSendChunk(bytesOut);
                 return;
             }
             // Send last chunk
             if (opts.isLastChunk(bytesOut)) {
                 let remainingOffset = opts.chunks.length - bytesSent;
-                sendChunk(opts.getFileSlice(remainingOffset));
+                sendChunk(opts.getFileSlice(remainingOffset), true);
                 return;
             }
 
@@ -89,7 +89,9 @@ http.createServer((req, res) => {
 
     function onThrottlingDownload() {
         // start to throttle
-        throttle(opts, function sendChunk(chunk: Buffer) { res.write(chunk); });
+        throttle(opts, function sendChunk(chunk: Buffer, isLast: boolean) {
+            (isLast) ? res.end(chunk) : res.write(chunk);
+        });
     }
 
 }).listen(8080);
