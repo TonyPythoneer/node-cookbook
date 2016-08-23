@@ -1,0 +1,30 @@
+node cookbook ch3
+
+Working with  Data Serialization
+
+p59
+Converting an object to JSON and back
+
+p62
+Constructing JSONP responses
+
+p64
+Converting an object to XML and back
+
+p67
+Generating XML attributes and text nodes
+
+p69
+Partial application
+
+p70
+Browser-server transmission via AJAX
+
+p75
+Sending serialized data from the client to the server
+
+p79
+Working with real data – fetching trending tweets
+
+p85
+Cross referencing Google Hot Trends with Twitter tweets
