@@ -1,7 +1,7 @@
 {
-  "name": "processing-post-data",
+  "name": "converting-an-object-to-xml-and-back",
   "version": "0.0.0",
-  "description": "Page 35 - Processing POST data",
+  "description": "Page 64 - Converting an object to XML and back",
   "main": "dist/app.js",
   "scripts": {
     "pre-install": "typings install",

@@ -1,5 +1,5 @@
 {
-  "name": "processing-post-data",
+  "name": "converting-an-object-to-json-and-back",
   "dependencies": {},
   "globalDependencies": {
     "node": "registry:dt/node#6.0.0+20160801161248"

@@ -1,7 +1,7 @@
 {
-  "name": "processing-post-data",
+  "name": "constructing-jsonp-responses",
   "version": "0.0.0",
-  "description": "Page 35 - Processing POST data",
+  "description": "Page 62 - Constructing JSONP responses",
   "main": "dist/app.js",
   "scripts": {
     "pre-install": "typings install",

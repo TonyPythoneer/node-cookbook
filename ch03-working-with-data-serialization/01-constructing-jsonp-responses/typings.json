@@ -1,5 +1,5 @@
 {
-  "name": "processing-post-data",
+  "name": "constructing-jsonp-responses",
   "dependencies": {},
   "globalDependencies": {
     "node": "registry:dt/node#6.0.0+20160801161248"
