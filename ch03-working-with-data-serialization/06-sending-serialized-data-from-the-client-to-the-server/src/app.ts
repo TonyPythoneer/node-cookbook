@@ -33,6 +33,7 @@ const ROUTES: IRoutes = {
     // output one of profiles
     '/profile': (contentType: string, basename: string) =>
         output(PROFILES[basename], contentType, basename),
+    // For front-end page to import
     'xml2js': (contentType) => {
         if (contentType === 'js') { return clientXml2js; }
     }
@@ -93,23 +94,18 @@ const server = http.createServer((req, res) => {
     console.log(`basename: ${basename}`)
 
     if (req.method === 'POST') {
-        addProfile(req, function(output) {
-            res.end(output);
-        });
+        addProfile(req, (result) => { res.end(result) });
         return;
     }
 
     // Visit method is url as '/profile/ryan'
     if (ROUTES.hasOwnProperty(dirname)) {
-        res.setHeader("Content-Type", MIMES[extname]);
         res.end(ROUTES[dirname](extname, basename));
         return;
     }
 
     // Visit method is url as '/profiles'
     if (ROUTES.hasOwnProperty(basename)) {
-        extname = extname || 'json'
-        res.setHeader("Content-Type", MIMES[extname]);
         res.end(ROUTES[basename](extname));
         return;
     }
@@ -118,31 +114,34 @@ const server = http.createServer((req, res) => {
 
     /////////
 
-    function addProfile(request, cb) {
-        var pD = ''; //post data
+    function addProfile(request: http.IncomingMessage, cb: (result: string) => void) {
+        let pD: Buffer = Buffer.alloc(0); //post data
         request
-            .on('data', function(chunk) { pD += chunk; })
-            .on('end', function() {
-                var contentType = request.headers['content-type'];
-                if (contentType === 'application/json') {
-                    updateProfiles(JSON.parse(pD), 'json', cb);
-                }
-                if (contentType === 'application/xml') {
-                    xml2js.parseString(pD, {
-                        explicitRoot: false,
-                        explicitArray: false
-                    }, function(err, obj) {
-                        updateProfiles(obj, 'xml', cb);
-                    });
+            .on('data', (chunk: Buffer) => { chunk.copy(pD) })
+            .on('end', () => {
+                let contentType = request.headers['content-type'];
+                switch (contentType) {
+                    case MIMES['json']:
+                        updateProfiles(JSON.parse(pD.toString()), 'json', cb);
+                        break;
+                    case MIMES['xml']:
+                        xml2js.parseString(pD.toString(), {
+                            explicitRoot: false,
+                            explicitArray: false
+                        }, (err, obj) => {
+                            updateProfiles(obj, 'xml', cb);
+                        });
+                        break;
                 }
             });
     }
 
-    function updateProfiles(profile, type, cb) {
-        var name = Object.keys(profile).pop();
+    function updateProfiles(profile: Object, type: string, cb: (result: string) => void) {
+        let name: string = Object.keys(profile).pop();
         PROFILES[name] = profile[name];
         cb(output(PROFILES[name], type, name));
     }
+
 }).listen(8080);
 
 server.on('clientError', (err, socket) => {
