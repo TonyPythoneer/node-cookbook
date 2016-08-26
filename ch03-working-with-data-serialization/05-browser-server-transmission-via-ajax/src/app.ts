@@ -52,8 +52,12 @@ const server = http.createServer((req, res) => {
 
     extname = extname.replace('.', ''); //remove period
     res.setHeader("Content-Type", MIMES[extname] || 'text/html');
-    console.log(dirname)
-    console.log(basename)
+
+    console.log(`req.url: ${req.url}`)
+    console.log(`dirname: ${dirname}`)
+    console.log(`extname: ${extname}`)
+    console.log(`basename: ${basename}`)
+
     if (ROUTES.hasOwnProperty(dirname)) {
         console.log(ROUTES[dirname](extname, basename));
         res.end(ROUTES[dirname](extname, basename));
