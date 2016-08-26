@@ -1,0 +1,32 @@
+{
+  "name": "sending-serialized-data-from-the-client-to-the-server",
+  "version": "0.0.0",
+  "description": "Page 75 - Sending serialized data from the client to the server",
+  "main": "dist/app.js",
+  "scripts": {
+    "pre-install": "typings install",
+    "dev": "concurrently \"npm run dev:watch\" \"npm run dev:start\"",
+    "dev:watch": "tsc -w",
+    "dev:start": "supervisor dist/app.js",
+    "start": "concurrently \"npm run prod:build\" \"npm run prod:start\"",
+    "prod:buid": "tsc",
+    "prod:start": "node dist/app.js",
+    "install:browserify": "npm run install:browserify:linux",
+    "install:browserify:windows": "npm -g install browserify",
+    "install:browserify:linux": "sudo npm -g install browserify",
+    "build:xml2js": "browserify node_modules/xml2js -s xml2js -o xml2js.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TonyPythoneer/node-cookbook.git"
+  },
+  "author": "TonyPythoneer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
+  },
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme",
+  "dependencies": {
+    "xml2js": "^0.4.17"
+  }
+}
