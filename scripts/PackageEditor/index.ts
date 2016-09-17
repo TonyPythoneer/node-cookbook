@@ -1,7 +1,7 @@
 import * as Promise from 'bluebird';
 
-import fsp from './lib/fsp';
 import * as config from './config';
+import fsp from './lib/fsp';
 import * as promiseUtil from './lib/promise-util';
 
 
