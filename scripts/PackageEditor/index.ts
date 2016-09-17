@@ -1,6 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 import * as Promise from 'bluebird';
 
 import fsp from './lib/fsp';
@@ -48,19 +45,18 @@ function main() {
         return Promise.resolve(chapterDirs)
             .map(promiseUtil.joinPathMapper(config.CONTENTS_DIR))
             .filter(promiseUtil.getDirectoriesFilter)
-            .filter(promiseUtil.matchRegularExpression(config.CHAPTER_PATTERN))
+            .filter(promiseUtil.matchReFilter(config.CHAPTER_PATTERN))
     }
 
     function readChapterDirs(chapterDirs: string[]) {
-        return Promise.resolve(chapterDirs)
-            .reduce(reducer, {})
+        return Promise.resolve(chapterDirs).reduce(reducer, {})
 
         ///// hoisted functions
 
         function reducer(prev: Object, current: string) {
             return fsp.readdirAsync(current)
                 .map(promiseUtil.joinPathMapper(current))
-                .filter(promiseUtil.matchRegularExpression(config.SECTION_PATTERN))
+                .filter(promiseUtil.matchReFilter(config.SECTION_PATTERN))
                 .then((sectionDirs) => {
                     prev[current] = sectionDirs;
                     return prev
@@ -69,7 +65,7 @@ function main() {
 
     }
 
-    ///// hoisted functions for utils
+    ///// TODO
 
     function filterAndGetPackagefile(filename: string) {
 

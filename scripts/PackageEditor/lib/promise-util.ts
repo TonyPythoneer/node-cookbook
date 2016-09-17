@@ -13,7 +13,7 @@ export function joinPathMapper(filepath: string) {
     return (filename: string) => path.join(filepath, filename);
 }
 
-export function matchRegularExpression(pattern: string) {
+export function matchReFilter(pattern: string) {
     return (filename) => {
         let re = new RegExp(pattern);
         let basename = path.basename(filename);
