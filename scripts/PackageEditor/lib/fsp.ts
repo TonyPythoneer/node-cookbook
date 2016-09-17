@@ -8,4 +8,5 @@ interface IFileSystemPromise {
     statAsync: (path: string) => Promise<fs.Stats>,
 }
 
-export default Promise.promisifyAll(fs) as IFileSystemPromise;
+const fsp = Promise.promisifyAll(fs) as IFileSystemPromise;
+export default fsp;
