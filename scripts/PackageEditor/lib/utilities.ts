@@ -31,7 +31,7 @@ export function parseJsonFile(filename: string | Buffer) {
     let data: Buffer;
     if (typeof filename === 'string') {
         data = fs.readFileSync(filename);
-    } else if (typeof filename === 'Buffer') {
+    } else {
         data = filename;
     }
     return JSON.parse(data.toString());
