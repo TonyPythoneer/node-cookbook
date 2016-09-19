@@ -112,7 +112,7 @@ function main() {
             ////
 
             function makeTargetFile(data: Buffer) {
-                let [targetFile, sourceFile] = [
+                let [targetJson, sourceJson] = [
                     data, config.TEMPLATE_FILES.PACKAGE
                 ].map(utils.parseJsonFile) as IPacakgeJson[];
 
@@ -122,16 +122,16 @@ function main() {
                 let sectionTitle = section.split('-').splice(1).join('-');
 
                 // Overwrite the items of package
-                targetFile.name = sectionTitle;
+                targetJson.name = sectionTitle;
                 config.TARGET_KEYS.PACKAGE.forEach(key => {
-                    targetFile[key] = sourceFile[key];
+                    targetJson[key] = targetJson[key];
                 })
 
-                return targetFile
+                return targetJson
             }
 
-            function overwriteTargetFile(targetFile: IPacakgeJson) {
-                fsp.writeFileAsync(filename, JSON.stringify(targetFile, null, 2));
+            function overwriteTargetFile(targetJson: IPacakgeJson) {
+                fsp.writeFileAsync(filename, JSON.stringify(targetJson, null, 2));
                 return filename
             }
         }
