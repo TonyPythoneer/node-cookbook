@@ -3,6 +3,8 @@
         "target": "es5",
          "experimentalDecorators": true,
         "preserveConstEnums": true,
+        "outDir": "dist",
+        "rootDir": "src",
         "sourceMap": true
     },
     "exclude": [
