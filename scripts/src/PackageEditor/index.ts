@@ -4,9 +4,9 @@ import * as Promise from 'bluebird';
 import * as sprintf from 'sprintf-js';
 
 import * as config from './config';
-import { ProcessBar } from './lib/events';
-import fsp from './lib/fsp';
-import * as utilities from './lib/utilities';
+import { ProcessBar } from './libs/events';
+import fsp from './libs/fsp';
+import * as utils from './libs/utils';
 
 
 interface IPacakgeJson {
@@ -43,11 +43,11 @@ function main() {
      * @returns {string[]} chapterDirs
      */
     function collectChapterDirs(contentsDir: string) {
-        let joinContentsDir = utilities.join(contentsDir);
-        let isMatchedChapter = utilities.isMatched(config.FILE_PATTERNS.CHAPTER);
+        let joinContentsDir = utils.join(contentsDir);
+        let isMatchedChapter = utils.isMatched(config.FILE_PATTERNS.CHAPTER);
         return fsp.readdirAsync(contentsDir)
             .map(joinContentsDir)
-            .filter(utilities.isDir)
+            .filter(utils.isDir)
             .filter(isMatchedChapter)
     }
 
@@ -62,8 +62,8 @@ function main() {
         ///// hoisted functions
 
         function concatSectionDirs(prev: string[], chapterDir: string) {
-            let joinChapterDir = utilities.join(chapterDir);
-            let isMatchedSection = utilities.isMatched(config.FILE_PATTERNS.SECTION);
+            let joinChapterDir = utils.join(chapterDir);
+            let isMatchedSection = utils.isMatched(config.FILE_PATTERNS.SECTION);
             return fsp.readdirAsync(chapterDir)
                 .map(joinChapterDir)
                 .filter(isMatchedSection)
@@ -82,8 +82,8 @@ function main() {
         ///// hoisted functions
 
         function collectTargetFile(sectionDir: string) {
-            let getPackage = utilities.getTargeFile(config.TARGET_FILES.PACKAGE);
-            let joinSectionDir = utilities.join(sectionDir);
+            let getPackage = utils.getTargeFile(config.TARGET_FILES.PACKAGE);
+            let joinSectionDir = utils.join(sectionDir);
             return fsp.readdirAsync(sectionDir)
                 .then(getPackage)
                 .then(joinSectionDir)
@@ -105,7 +105,7 @@ function main() {
             fsp.readFileAsync(filename).then(data => {
                 let [targetFile, sourceFile] = [
                     data, config.TEMPLATE_FILES.PACKAGE
-                ].map(utilities.parseJsonFile) as IPacakgeJson[];
+                ].map(utils.parseJsonFile) as IPacakgeJson[];
 
                 // Get section title
                 let paths = filename.split(path.sep);
