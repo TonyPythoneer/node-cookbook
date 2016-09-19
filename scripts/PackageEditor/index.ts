@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as fs from 'fs';
 
 import * as Promise from 'bluebird';
 
@@ -25,15 +24,6 @@ interface IPacakgeJson {
     },
     homepage: string,
 }
-let targetKeys = [
-    'scripts',
-    'repository',
-    'author',
-    'license',
-    'bugs',
-    'homepage',
-];
-
 
 
 function main() {
@@ -67,14 +57,14 @@ function main() {
      * @returns {string[]} sectionDirs
      */
     function collectSectionDirs(chapterDirs: string[]) {
-        return Promise.reduce(chapterDirs, reducer, [])
+        return Promise.reduce(chapterDirs, concatSectionDirs, [])
 
         ///// hoisted functions
 
-        function reducer(prev: string[], current: string, index: number) {
-            let joinChapterDir = utilities.join(current);
+        function concatSectionDirs(prev: string[], chapterDir: string) {
+            let joinChapterDir = utilities.join(chapterDir);
             let isMatchedSection = utilities.isMatched(config.FILE_PATTERNS.SECTION);
-            return fsp.readdirAsync(current)
+            return fsp.readdirAsync(chapterDir)
                 .map(joinChapterDir)
                 .filter(isMatchedSection)
                 .then(sectionDirs => prev.concat(sectionDirs))
@@ -87,11 +77,11 @@ function main() {
      * @returns {string[]} targetFiles
      */
     function collectTargetFiles(sectionDirs: string[]) {
-        return Promise.map(sectionDirs, mapper2)
+        return Promise.map(sectionDirs, collectTargetFile)
 
         ///// hoisted functions
 
-        function mapper2(sectionDir: string) {
+        function collectTargetFile(sectionDir: string) {
             let getPackage = utilities.getTargeFile(config.TARGET_FILES.PACKAGE);
             let joinSectionDir = utilities.join(sectionDir);
             return fsp.readdirAsync(sectionDir)
@@ -105,9 +95,11 @@ function main() {
      * @param {string[]} filenames
      */
     function editPackagefiles(filenames: string[]) {
-        return Promise.map(filenames, mapper)
+        return Promise.map(filenames, editPackagefile)
 
-        function mapper(filename: string) {
+        ///// hoisted functions
+
+        function editPackagefile(filename: string) {
             fsp.readFileAsync(filename).then(data => {
                 let [targetFile, sourceFile] = [
                     data, config.TEMPLATE_FILES.PACKAGE
@@ -120,13 +112,13 @@ function main() {
 
                 // Overwrite the items of package
                 targetFile.name = sectionTitle;
-                targetKeys.forEach(key => {
+                config.TARGET_KEYS.PACKAGE.forEach(key => {
                     targetFile[key] = sourceFile[key];
                 })
 
                 return targetFile
             }).then((targetFile) => {
-                fsp.writeFileAsync(filename, JSON.stringify(targetFile, null, 2))
+                fsp.writeFileAsync(filename, JSON.stringify(targetFile, null, 2));
                 console.log(`Finish ${filename}`);
             })
         }
