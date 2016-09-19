@@ -32,8 +32,8 @@ function main() {
     Promise.resolve(config.CONTENTS_DIR)
         .then(collectChapterDirs)
         .then(collectSectionDirs)
-        .then(collectTargetFile)
-        .then(editPackagefile)
+        .then(collectTargetFiles)
+        //.then(editPackagefile)
         .then(anything => console.log(anything))
         .then(() => console.log('Finish!'))
 
@@ -41,12 +41,12 @@ function main() {
 
     /**
      * Read contentsDir to collect chapterDirs
-     * @param {string} contentsDir - contents directory
-     * @returns {string[]} chapterDirs - chapter directories
+     * @param {string} contentsDir
+     * @returns {string[]} chapterDirs
      */
     function collectChapterDirs(contentsDir: string) {
         let joinContentsDirMapper = promiseUtil.joinPathMapper(contentsDir);
-        let matchChapterFilter = promiseUtil.matchReFilter(config.CHAPTER_PATTERN);
+        let matchChapterFilter = promiseUtil.matchReFilter(config.FILE_PATTERNS.CHAPTER);
         return fsp.readdirAsync(config.CONTENTS_DIR)
             .map(joinContentsDirMapper)
             .filter(promiseUtil.getDirectoriesFilter)
@@ -55,8 +55,8 @@ function main() {
 
     /**
      * Read contentsDir to collect sectionDirs
-     * @param {string[]} chapterDirs - chapter directories
-     * @returns {string[]} sectionDirs - section directories
+     * @param {string[]} chapterDirs
+     * @returns {string[]} sectionDirs
      */
     function collectSectionDirs(chapterDirs: string[]) {
         return Promise.reduce(chapterDirs, reducer, [])
@@ -65,33 +65,39 @@ function main() {
 
         function reducer(prev: string[], current: string, index: number) {
             let joinChapterDirMapper = promiseUtil.joinPathMapper(current);
-            let matchSectionFilter = promiseUtil.matchReFilter(config.SECTION_PATTERN);
+            let matchSectionFilter = promiseUtil.matchReFilter(config.FILE_PATTERNS.SECTION);
             return fsp.readdirAsync(current)
                 .map(joinChapterDirMapper)
                 .filter(matchSectionFilter)
                 .then(sectionDirs => prev.concat(sectionDirs))
         }
-
     }
 
-    function collectTargetFile(sectionDirs: string[]) {
+    /**
+     * Read sectionDirs to collect targetFiles
+     * @param {string[]} sectionDirs
+     * @returns {string[]} targetFiles
+     */
+    function collectTargetFiles(sectionDirs: string[]) {
         return Promise.map(sectionDirs, mapper2)
 
         ///// hoisted functions
 
         function mapper2(sectionDir: string) {
             return fsp.readdirAsync(sectionDir)
-                .then(filenames => {
-                    return nestFn(filenames, "package.json")
-                })
+                .then(getTargeFile(config.TARGET_FILES.PACKAGE))
+                .then(promiseUtil.joinPathMapper(sectionDir))
 
-            function nestFn(filenames, targetName) {
-                let index = filenames.indexOf(targetName);
-                let targetFn = filenames[index];
-                let targetFnDir = path.join(sectionDir, targetFn);
-                return targetFnDir
+            function getTargeFile(targetFile) {
+                return (filenames: string[]) => {
+                    let targetIndex = filenames.indexOf(targetFile);
+                    let targetFn = filenames[targetIndex];
+                    return targetFn
+                }
             }
         }
+
+
     }
 
     function editPackagefile(filenames: string[]) {
@@ -100,7 +106,7 @@ function main() {
         function mapper(filename: string) {
             fsp.readFileAsync(filename).then(data => {
                 let targetFile: IPacakgeJson = JSON.parse(data.toString());
-                let sourceFile: IPacakgeJson = JSON.parse(fs.readFileSync(config.TEMPLATE_PACKAGE).toString());
+                let sourceFile: IPacakgeJson = JSON.parse(fs.readFileSync(config.TEMPLATE_FILES.PACKAGE).toString());
 
                 let paths = filename.split(path.sep);
                 let section = paths[paths.length - 2];
