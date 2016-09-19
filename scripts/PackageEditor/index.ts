@@ -100,8 +100,6 @@ function main() {
      * @param {string[]} filenames
      */
     function editPackagefiles(filenames: string[]) {
-        console.log("filenames")
-        console.log(filenames)
         let a = showProcessBar(filenames)
         return Promise.map(filenames, editPackagefile)
 
