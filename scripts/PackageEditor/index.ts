@@ -45,12 +45,12 @@ function main() {
      * @returns {string[]} chapterDirs
      */
     function collectChapterDirs(contentsDir: string) {
-        let joinContentsDirMapper = promiseUtil.joinPathMapper(contentsDir);
-        let matchChapterFilter = promiseUtil.matchReFilter(config.FILE_PATTERNS.CHAPTER);
+        let joinContentsDir = promiseUtil.join(contentsDir);
+        let isMatchedChapter = promiseUtil.isMatched(config.FILE_PATTERNS.CHAPTER);
         return fsp.readdirAsync(config.CONTENTS_DIR)
-            .map(joinContentsDirMapper)
-            .filter(promiseUtil.getDirectoriesFilter)
-            .filter(matchChapterFilter)
+            .map(joinContentsDir)
+            .filter(promiseUtil.isDir)
+            .filter(isMatchedChapter)
     }
 
     /**
@@ -64,11 +64,11 @@ function main() {
         ///// hoisted functions
 
         function reducer(prev: string[], current: string, index: number) {
-            let joinChapterDirMapper = promiseUtil.joinPathMapper(current);
-            let matchSectionFilter = promiseUtil.matchReFilter(config.FILE_PATTERNS.SECTION);
+            let joinChapterDir = promiseUtil.join(current);
+            let isMatchedSection = promiseUtil.isMatched(config.FILE_PATTERNS.SECTION);
             return fsp.readdirAsync(current)
-                .map(joinChapterDirMapper)
-                .filter(matchSectionFilter)
+                .map(joinChapterDir)
+                .filter(isMatchedSection)
                 .then(sectionDirs => prev.concat(sectionDirs))
         }
     }
@@ -86,7 +86,7 @@ function main() {
         function mapper2(sectionDir: string) {
             return fsp.readdirAsync(sectionDir)
                 .then(getTargeFile(config.TARGET_FILES.PACKAGE))
-                .then(promiseUtil.joinPathMapper(sectionDir))
+                .then(promiseUtil.join(sectionDir))
 
             function getTargeFile(targetFile) {
                 return (filenames: string[]) => {
