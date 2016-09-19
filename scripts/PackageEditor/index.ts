@@ -9,21 +9,21 @@ import * as promiseUtil from './lib/promise-util';
 
 
 interface IPacakgeJson {
-    "name": string,
-    "version": string,
-    "description": string,
-    "main": string,
-    "scripts": Object,
-    "repository": {
+    name: string,
+    version: string,
+    description: string,
+    main: string,
+    scripts: Object,
+    repository: {
         type: string,
         url: string,
     },
-    "author": string,
-    "license": string,
-    "bugs": {
+    author: string,
+    license: string,
+    bugs: {
         url: string,
     },
-    "homepage": string,
+    homepage: string,
 }
 
 
@@ -84,20 +84,12 @@ function main() {
         ///// hoisted functions
 
         function mapper2(sectionDir: string) {
+            let getPackage = promiseUtil.getTargeFile(config.TARGET_FILES.PACKAGE);
+            let joinSectionDir = promiseUtil.join(sectionDir);
             return fsp.readdirAsync(sectionDir)
-                .then(getTargeFile(config.TARGET_FILES.PACKAGE))
-                .then(promiseUtil.join(sectionDir))
-
-            function getTargeFile(targetFile) {
-                return (filenames: string[]) => {
-                    let targetIndex = filenames.indexOf(targetFile);
-                    let targetFn = filenames[targetIndex];
-                    return targetFn
-                }
-            }
+                .then(getPackage)
+                .then(joinSectionDir)
         }
-
-
     }
 
     function editPackagefile(filenames: string[]) {

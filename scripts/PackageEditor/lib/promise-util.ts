@@ -21,3 +21,11 @@ export function isMatched(pattern: string) {
         return isMatched;
     }
 }
+
+export function getTargeFile(targetFile) {
+    return (filenames: string[]) => {
+        let targetIndex = filenames.indexOf(targetFile);
+        let targetFn = filenames[targetIndex];
+        return targetFn
+    }
+}
