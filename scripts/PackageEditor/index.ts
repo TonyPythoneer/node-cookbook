@@ -109,8 +109,9 @@ function main() {
 
         function mapper(filename: string) {
             fsp.readFileAsync(filename).then(data => {
-                let targetFile: IPacakgeJson = JSON.parse(data.toString());
-                let sourceFile: IPacakgeJson = JSON.parse(fs.readFileSync(config.TEMPLATE_FILES.PACKAGE).toString());
+                let [targetFile, sourceFile] = [
+                    data, config.TEMPLATE_FILES.PACKAGE
+                ].map(utilities.parseJsonFile) as IPacakgeJson[];
 
                 // Get section title
                 let paths = filename.split(path.sep);
