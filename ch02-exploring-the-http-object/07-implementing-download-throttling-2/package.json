@@ -5,13 +5,12 @@
   "main": "dist/app.js",
   "scripts": {
     "pre-install": "typings install",
-    "dev": "concurrently \"npm run dev:watch\" \"npm run dev:start\"",
+    "dev": "concurrently \"npm run dev:watch\" \"npm run dev:run\"",
     "dev:watch": "tsc -w",
     "dev:start": "supervisor dist/app.js",
     "start": "concurrently \"npm run prod:build\" \"npm run prod:start\"",
     "prod:buid": "tsc",
-    "prod:start": "node dist/app.js",
-    "50meg": "dd if=/dev/zero of=50meg count=50 bs=1048576"
+    "prod:start": "node dist/app.js"
   },
   "repository": {
     "type": "git",

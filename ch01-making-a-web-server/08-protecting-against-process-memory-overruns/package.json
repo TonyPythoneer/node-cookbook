@@ -4,11 +4,13 @@
   "description": "Page 25 - Protecting against process memory overruns",
   "main": "dist/index.js",
   "scripts": {
-    "preinstall": "typings install",
-    "build": "tsc",
-    "watch": "tsc -w",
-    "dev": "npm run build && supervisor dist/app.js",
-    "start": "npm run build && node dist/app.js"
+    "pre-install": "typings install",
+    "dev": "concurrently \"npm run dev:watch\" \"npm run dev:run\"",
+    "dev:watch": "tsc -w",
+    "dev:start": "supervisor dist/app.js",
+    "start": "concurrently \"npm run prod:build\" \"npm run prod:start\"",
+    "prod:buid": "tsc",
+    "prod:start": "node dist/app.js"
   },
   "repository": {
     "type": "git",
