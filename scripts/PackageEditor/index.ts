@@ -5,7 +5,7 @@ import * as Promise from 'bluebird';
 
 import * as config from './config';
 import fsp from './lib/fsp';
-import * as promiseUtil from './lib/promise-util';
+import * as utilities from './lib/utilities';
 
 
 interface IPacakgeJson {
@@ -53,11 +53,11 @@ function main() {
      * @returns {string[]} chapterDirs
      */
     function collectChapterDirs(contentsDir: string) {
-        let joinContentsDir = promiseUtil.join(contentsDir);
-        let isMatchedChapter = promiseUtil.isMatched(config.FILE_PATTERNS.CHAPTER);
+        let joinContentsDir = utilities.join(contentsDir);
+        let isMatchedChapter = utilities.isMatched(config.FILE_PATTERNS.CHAPTER);
         return fsp.readdirAsync(config.CONTENTS_DIR)
             .map(joinContentsDir)
-            .filter(promiseUtil.isDir)
+            .filter(utilities.isDir)
             .filter(isMatchedChapter)
     }
 
@@ -72,8 +72,8 @@ function main() {
         ///// hoisted functions
 
         function reducer(prev: string[], current: string, index: number) {
-            let joinChapterDir = promiseUtil.join(current);
-            let isMatchedSection = promiseUtil.isMatched(config.FILE_PATTERNS.SECTION);
+            let joinChapterDir = utilities.join(current);
+            let isMatchedSection = utilities.isMatched(config.FILE_PATTERNS.SECTION);
             return fsp.readdirAsync(current)
                 .map(joinChapterDir)
                 .filter(isMatchedSection)
@@ -92,8 +92,8 @@ function main() {
         ///// hoisted functions
 
         function mapper2(sectionDir: string) {
-            let getPackage = promiseUtil.getTargeFile(config.TARGET_FILES.PACKAGE);
-            let joinSectionDir = promiseUtil.join(sectionDir);
+            let getPackage = utilities.getTargeFile(config.TARGET_FILES.PACKAGE);
+            let joinSectionDir = utilities.join(sectionDir);
             return fsp.readdirAsync(sectionDir)
                 .then(getPackage)
                 .then(joinSectionDir)
