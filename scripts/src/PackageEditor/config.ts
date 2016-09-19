@@ -1,7 +1,8 @@
 /**
  * DIRS
  */
-export const CONTENTS_DIR = '../../';
+export const BASE_DIR = __dirname;
+export const CONTENTS_DIR = `${BASE_DIR}/../../../`;
 
 /**
  * FILE_PATTERNS
@@ -34,5 +35,5 @@ export const TARGET_KEYS = {
  * TEMPLATE_FILES
  */
 export const TEMPLATE_FILES = {
-    PACKAGE: './package.sample.json',
+    PACKAGE: `${BASE_DIR}/../../public/package.sample.json`,
 };
