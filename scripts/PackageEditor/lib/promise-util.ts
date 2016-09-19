@@ -1,12 +1,9 @@
+import * as fs from 'fs';
 import * as path from 'path';
-
-import fsp from './fsp';
 
 
 export function isDir(filename: string) {
-    return fsp.statAsync(filename)
-        .then((stat) => stat.isDirectory())
-        .catch(() => false)
+    return fs.statSync(filename).isDirectory();
 }
 
 export function join(filepath: string) {

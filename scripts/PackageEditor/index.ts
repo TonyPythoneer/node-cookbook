@@ -25,6 +25,14 @@ interface IPacakgeJson {
     },
     homepage: string,
 }
+let targetKeys = [
+    'scripts',
+    'repository',
+    'author',
+    'license',
+    'bugs',
+    'homepage',
+];
 
 
 
@@ -33,7 +41,7 @@ function main() {
         .then(collectChapterDirs)
         .then(collectSectionDirs)
         .then(collectTargetFiles)
-        //.then(editPackagefile)
+        .then(editPackagefiles)
         .then(anything => console.log(anything))
         .then(() => console.log('Finish!'))
 
@@ -92,7 +100,11 @@ function main() {
         }
     }
 
-    function editPackagefile(filenames: string[]) {
+    /**
+     * Edit packages
+     * @param {string[]} filenames
+     */
+    function editPackagefiles(filenames: string[]) {
         return Promise.map(filenames, mapper)
 
         function mapper(filename: string) {
@@ -104,7 +116,9 @@ function main() {
                 let section = paths[paths.length - 2];
                 let sectionTitle = section.split('-').splice(1).join('-');
                 targetFile.name = sectionTitle;
-                targetFile.scripts = sourceFile.scripts;
+                targetKeys.forEach(key => {
+                    targetFile[key] = sourceFile[key];
+                })
 
                 return targetFile
             }).then((targetFile) => {
