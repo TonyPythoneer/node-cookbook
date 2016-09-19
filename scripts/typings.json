@@ -3,6 +3,7 @@
   "dependencies": {},
   "globalDependencies": {
     "bluebird": "registry:dt/bluebird#3.0.0+20160811111256",
-    "node": "registry:dt/node#6.0.0+20160801161248"
+    "node": "registry:dt/node#6.0.0+20160801161248",
+    "sprintf-js": "registry:dt/sprintf-js#0.0.0+20160317120654"
   }
 }

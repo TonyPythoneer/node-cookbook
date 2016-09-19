@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/TonyPythoneer/node-cookbook/issues"
   },
-  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme"
+  "homepage": "https://github.com/TonyPythoneer/node-cookbook#readme",
+  "dependencies": {
+    "sprintf-js": "^1.0.3"
+  }
 }
