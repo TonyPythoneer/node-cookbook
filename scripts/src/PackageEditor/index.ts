@@ -135,15 +135,15 @@ function main() {
                 return filename
             }
         }
+    }
 
-        function createProcessBarListener(goal: number, options?: IProcessBarOptions) {
-            let processBar = new ProcessBar(goal, options);
+    function createProcessBarListener(goal: number, options?: IProcessBarOptions) {
+        let processBar = new ProcessBar(goal, options);
 
-            return (filename: string) => {
-                let section = path.basename(path.dirname(filename));
-                let fn = path.basename(filename);
-                processBar.tick(`${section}/${fn}`);
-            }
+        return (filename: string) => {
+            let section = path.basename(path.dirname(filename));
+            let fn = path.basename(filename);
+            processBar.tick(`${section}/${fn}`);
         }
     }
 }
