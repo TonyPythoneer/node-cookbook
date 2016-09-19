@@ -112,9 +112,12 @@ function main() {
                 let targetFile: IPacakgeJson = JSON.parse(data.toString());
                 let sourceFile: IPacakgeJson = JSON.parse(fs.readFileSync(config.TEMPLATE_FILES.PACKAGE).toString());
 
+                // Get section title
                 let paths = filename.split(path.sep);
                 let section = paths[paths.length - 2];
                 let sectionTitle = section.split('-').splice(1).join('-');
+
+                // Overwrite the items of package
                 targetFile.name = sectionTitle;
                 targetKeys.forEach(key => {
                     targetFile[key] = sourceFile[key];
@@ -127,9 +130,6 @@ function main() {
             })
         }
     }
-
-
-
 }
 
 
