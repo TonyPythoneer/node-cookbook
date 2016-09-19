@@ -4,6 +4,7 @@ import * as Promise from 'bluebird';
 import * as sprintf from 'sprintf-js';
 
 import * as config from './config';
+import { ProcessBar } from './lib/events';
 import fsp from './lib/fsp';
 import * as utilities from './lib/utilities';
 
@@ -30,15 +31,9 @@ interface IPacakgeJson {
 function main() {
     Promise.resolve(config.CONTENTS_DIR)
         .then(collectChapterDirs)
-        .catch(() => console.log("collectChapterDirs has problem!"))
         .then(collectSectionDirs)
-        .catch(() => console.log("collectSectionDirs has problem!"))
         .then(collectTargetFiles)
-        .catch(() => console.log("collectTargetFiles has problem!"))
         .then(editPackagefiles)
-        .catch(() => console.log("editPackagefiles has problem!"))
-        .then(anything => console.log(anything))
-        .then(() => console.log('Finish!'))
 
     ///// hoisted functions for promise
 
@@ -100,7 +95,8 @@ function main() {
      * @param {string[]} filenames
      */
     function editPackagefiles(filenames: string[]) {
-        let a = showProcessBar(filenames)
+        console.log(filenames)
+        let processBar = new ProcessBar(filenames.length, {action: 'Editing'});
         return Promise.map(filenames, editPackagefile)
 
         ///// hoisted functions
@@ -125,26 +121,8 @@ function main() {
                 return targetFile
             }).then((targetFile) => {
                 fsp.writeFileAsync(filename, JSON.stringify(targetFile, null, 2));
-                a();
+                processBar.tick(filename)
             })
-        }
-
-        function showProcessBar(filenames: string[]) {
-            let current = 0;
-            let total = filenames.length;
-
-            return function tick() {
-                current++;
-                console.log(current, total)
-                let fmt = '%(action)s [%(bar)10s] %(percentage)3s%% %(message)s';
-                let kwargs = {
-                    action: "Editing",
-                    bar: "===",
-                    percentage: Math.floor((current / total) * 100),
-                    message: "any",
-                }
-                console.log(sprintf.sprintf(fmt, kwargs))
-            }
         }
     }
 }
