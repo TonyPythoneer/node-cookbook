@@ -1,6 +1,7 @@
 import * as path from 'path';
 
 import * as Promise from 'bluebird';
+import * as sprintf from 'sprintf-js';
 
 import * as config from './config';
 import fsp from './lib/fsp';
@@ -29,9 +30,13 @@ interface IPacakgeJson {
 function main() {
     Promise.resolve(config.CONTENTS_DIR)
         .then(collectChapterDirs)
+        .catch(() => console.log("collectChapterDirs has problem!"))
         .then(collectSectionDirs)
+        .catch(() => console.log("collectSectionDirs has problem!"))
         .then(collectTargetFiles)
+        .catch(() => console.log("collectTargetFiles has problem!"))
         .then(editPackagefiles)
+        .catch(() => console.log("editPackagefiles has problem!"))
         .then(anything => console.log(anything))
         .then(() => console.log('Finish!'))
 
@@ -45,7 +50,7 @@ function main() {
     function collectChapterDirs(contentsDir: string) {
         let joinContentsDir = utilities.join(contentsDir);
         let isMatchedChapter = utilities.isMatched(config.FILE_PATTERNS.CHAPTER);
-        return fsp.readdirAsync(config.CONTENTS_DIR)
+        return fsp.readdirAsync(contentsDir)
             .map(joinContentsDir)
             .filter(utilities.isDir)
             .filter(isMatchedChapter)
@@ -95,6 +100,9 @@ function main() {
      * @param {string[]} filenames
      */
     function editPackagefiles(filenames: string[]) {
+        console.log("filenames")
+        console.log(filenames)
+        let a = showProcessBar(filenames)
         return Promise.map(filenames, editPackagefile)
 
         ///// hoisted functions
@@ -119,8 +127,26 @@ function main() {
                 return targetFile
             }).then((targetFile) => {
                 fsp.writeFileAsync(filename, JSON.stringify(targetFile, null, 2));
-                console.log(`Finish ${filename}`);
+                a();
             })
+        }
+
+        function showProcessBar(filenames: string[]) {
+            let current = 0;
+            let total = filenames.length;
+
+            return function tick() {
+                current++;
+                console.log(current, total)
+                let fmt = '%(action)s [%(bar)10s] %(percentage)3s%% %(message)s';
+                let kwargs = {
+                    action: "Editing",
+                    bar: "===",
+                    percentage: Math.floor((current / total) * 100),
+                    message: "any",
+                }
+                console.log(sprintf.sprintf(fmt, kwargs))
+            }
         }
     }
 }
