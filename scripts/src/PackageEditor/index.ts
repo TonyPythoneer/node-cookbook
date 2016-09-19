@@ -4,7 +4,7 @@ import * as Promise from 'bluebird';
 import * as sprintf from 'sprintf-js';
 
 import * as config from './config';
-import { ProcessBar } from './libs/events';
+import { ProcessBar, IProcessBarOptions } from './libs/events';
 import fsp from './libs/fsp';
 import * as utils from './libs/utils';
 
@@ -95,14 +95,23 @@ function main() {
      * @param {string[]} filenames
      */
     function editPackagefiles(filenames: string[]) {
-        console.log(filenames)
-        let processBar = new ProcessBar(filenames.length, {action: 'Editing'});
+        let processBarListener = createProcessBarListener(
+            filenames.length,
+            { action: 'Editing...' }
+        )
         return Promise.map(filenames, editPackagefile)
 
         ///// hoisted functions
 
         function editPackagefile(filename: string) {
-            fsp.readFileAsync(filename).then(data => {
+            fsp.readFileAsync(filename)
+                .then(makeTargetFile)
+                .then(overwriteTargetFile)
+                .then(processBarListener)
+
+            ////
+
+            function makeTargetFile(data: Buffer) {
                 let [targetFile, sourceFile] = [
                     data, config.TEMPLATE_FILES.PACKAGE
                 ].map(utils.parseJsonFile) as IPacakgeJson[];
@@ -119,10 +128,22 @@ function main() {
                 })
 
                 return targetFile
-            }).then((targetFile) => {
+            }
+
+            function overwriteTargetFile(targetFile: IPacakgeJson) {
                 fsp.writeFileAsync(filename, JSON.stringify(targetFile, null, 2));
-                processBar.tick(filename)
-            })
+                return filename
+            }
+        }
+
+        function createProcessBarListener(goal: number, options?: IProcessBarOptions) {
+            let processBar = new ProcessBar(goal, options);
+
+            return (filename: string) => {
+                let section = path.basename(path.dirname(filename));
+                let fn = path.basename(filename);
+                processBar.tick(`${section}/${fn}`);
+            }
         }
     }
 }
