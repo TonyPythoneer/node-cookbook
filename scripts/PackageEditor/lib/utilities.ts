@@ -26,3 +26,13 @@ export function getTargeFile(targetFile) {
         return targetFn
     }
 }
+
+export function parseJsonFile(filename: string | Buffer) {
+    let data: Buffer;
+    if (typeof filename === 'string') {
+        data = fs.readFileSync(filename);
+    } else if (typeof filename === 'Buffer') {
+        data = filename;
+    }
+    return JSON.parse(data.toString());
+}
