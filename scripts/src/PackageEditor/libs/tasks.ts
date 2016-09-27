@@ -107,9 +107,7 @@ export function editPackagefiles(filenames: string[]) {
         ////
 
         function makeTargetFile(data: Buffer) {
-            let [targetJson, sourceJson] = [
-                data, config.TEMPLATE_FILES.PACKAGE
-            ].map(utils.parseJsonFile) as IPacakgeJson[];
+            let targetJson: IPacakgeJson = utils.parseJsonFile(data)
 
             // Get section title
             let paths = filename.split(path.sep);

@@ -1,11 +1,19 @@
 {
     "compilerOptions": {
+        "experimentalDecorators": true,
         "target": "es5",
-         "experimentalDecorators": true,
-        "preserveConstEnums": true,
-        "outDir": "dist",
-        "rootDir": "src",
-        "sourceMap": true
+        "noImplicitAny": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "sourceMap": true,
+        "removeComments": false,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "pretty": true
     },
     "exclude": [
         "node_modules"

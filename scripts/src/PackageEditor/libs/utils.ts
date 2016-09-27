@@ -12,14 +12,14 @@ export function join(filepath: string) {
 
 export function isMatched(pattern: string) {
     let re = new RegExp(pattern);
-    return (filename) => {
+    return (filename: string) => {
         let basename = path.basename(filename);
         let isMatched = Boolean(re.exec(basename));
         return isMatched;
     }
 }
 
-export function getTargeFile(targetFile) {
+export function getTargeFile(targetFile: string) {
     return (filenames: string[]) => {
         let targetIndex = filenames.indexOf(targetFile);
         let targetFn = filenames[targetIndex];

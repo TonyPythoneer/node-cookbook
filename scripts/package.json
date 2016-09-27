@@ -7,8 +7,7 @@
     "preinstall": "typings install",
     "build": "tsc",
     "watch": "tsc -w",
-    "dev": "npm run build && supervisor dist/app.js",
-    "start": "npm run build && node dist/app.js"
+    "start:pkg": "npm run build && node dist/PackageEditor/index.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +22,6 @@
   "dependencies": {
     "lodash": "^4.15.0",
     "sprintf-js": "^1.0.3"
-  }
+  },
+  "devDependencies": {}
 }
